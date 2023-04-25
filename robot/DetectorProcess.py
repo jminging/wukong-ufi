@@ -58,7 +58,7 @@ class DetectorProcess(Process):
         # main loop
         try:
             callbacks = self.wukong.detected_callback
-            detector.start(
+            self.detector.start(
                 detected_callback = callbacks,
                 audio_recorder_callback = self._wukong.conversation.converse,
                 interrupt_check = self._wukong.interrupt_callback,
@@ -66,7 +66,7 @@ class DetectorProcess(Process):
                 recording_timeout = self.recording_timeout,
                 sleep_time=0.03,
             )
-            detector.terminate()
+            self.detector.terminate()
         except Exception as e:
             logger.critical(f"离线唤醒机制初始化失败：{e}", stack_info=True)
 
