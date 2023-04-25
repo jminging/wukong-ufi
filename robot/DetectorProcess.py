@@ -23,7 +23,7 @@ def detectorThread():
 
 class DetectorProcess(Process):
     def __init__(self, wukong, config):
-        Process.__init__()
+        Process.__init__(self)
         self.name = 'detectorProcess'
         self.is_stop = False
         self._reload(config)
