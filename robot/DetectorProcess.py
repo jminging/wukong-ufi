@@ -23,7 +23,7 @@ def detectorThread():
 
 class DetectorProcess(Process):
     def __init__(self, wukong, config):
-        Process.__init__()
+        Process.__init__(self)
         self.name = 'detectorProcess'
         self.is_stop = False
         self._reload(config)
@@ -51,14 +51,14 @@ class DetectorProcess(Process):
 
         logger.info("使用 snowboy 进行离线唤醒")
         self.detector and self.detector.terminate()
-        models = constants.getHotwordModel(config.get("hotword", "wukong.pmdl"))
+        models = constants.getHotwordModel(self.hotword)
         self.detector = snowboydecoder.HotwordDetector(
-            models, sensitivity=config.get("sensitivity", 0.5)
+            models, sensitivity=self.sensitivity
         )
         # main loop
         try:
             callbacks = self.wukong.detected_callback
-            detector.start(
+            self.detector.start(
                 detected_callback = callbacks,
                 audio_recorder_callback = self._wukong.conversation.converse,
                 interrupt_check = self._wukong.interrupt_callback,
@@ -66,7 +66,7 @@ class DetectorProcess(Process):
                 recording_timeout = self.recording_timeout,
                 sleep_time=0.03,
             )
-            detector.terminate()
+            self.detector.terminate()
         except Exception as e:
             logger.critical(f"离线唤醒机制初始化失败：{e}", stack_info=True)
 
