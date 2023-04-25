@@ -146,9 +146,9 @@ class TencentASR(AbstractASR):
         return config.get("tencent_yuyin", {})
 
     def transcribe(self, fp):
-        mp3_path = utils.convert_wav_to_mp3(fp)
-        r = self.engine.ASR(mp3_path, "mp3", "1", self.region)
-        utils.check_and_delete(mp3_path)
+        # mp3_path = utils.convert_wav_to_mp3(fp)
+        r = self.engine.ASR(fp, "wav", "1", self.region)
+        utils.check_and_delete(fp)
         res = json.loads(r)
         if "Response" in res and "Result" in res["Response"]:
             logger.info(f"{self.SLUG} 语音识别到了：{res['Response']['Result']}")
