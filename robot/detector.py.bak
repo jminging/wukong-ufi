@@ -92,6 +92,7 @@ def initDetector(wukong):
 
     else:
         logger.info("使用 snowboy 进行离线唤醒")
+        # 如果存在，停止
         detector and detector.terminate()
         models = constants.getHotwordModel(config.get("hotword", "wukong.pmdl"))
         detector = snowboydecoder.HotwordDetector(
