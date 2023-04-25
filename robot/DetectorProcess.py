@@ -60,8 +60,8 @@ class DetectorProcess(Process):
             callbacks = self.wukong.detected_callback
             self.detector.start(
                 detected_callback = callbacks,
-                audio_recorder_callback = self._wukong.conversation.converse,
-                interrupt_check = self._wukong.interrupt_callback,
+                audio_recorder_callback = self.wukong.conversation.converse,
+                interrupt_check = self.wukong.interrupt_callback,
                 silent_count_threshold = self.silent_count_threshold,
                 recording_timeout = self.recording_timeout,
                 sleep_time=0.03,
