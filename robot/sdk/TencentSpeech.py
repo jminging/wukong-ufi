@@ -235,8 +235,8 @@ class tencentSpeech(object):
         # header['Authorization'] = \
         self.makeSign(header, body)
         
-        print('\n\n\n\nheaders:')
-        print(header)
+        # print('\n\n\n\nheaders:')
+        # print(header)
         
         request = requests.post(req_url, headers=header, json=body)
         # 有些音频utf8解码失败，存在编码错误
@@ -257,7 +257,7 @@ class tencentSpeech(object):
         payload = json.dumps(body)
         host = headers['Host']
         action = headers['X-TC-Action']
-        print("action: {}", action)
+        # print("action: {}", action)
         canonical_headers = "content-type:%s\nhost:%s\nx-tc-action:%s\n" % (ct, host, action.lower())
         signed_headers = "content-type;host;x-tc-action"
         hashed_request_payload = hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -267,7 +267,7 @@ class tencentSpeech(object):
                              canonical_headers + "\n" +
                              signed_headers + "\n" +
                              hashed_request_payload)
-        print(canonical_request)
+        # print(canonical_request)
 
         # ************* 步骤 2：拼接待签名字符串 *************
         credential_scope = date + "/" + service + "/" + "tc3_request"
@@ -276,7 +276,7 @@ class tencentSpeech(object):
                           str(timestamp) + "\n" +
                           credential_scope + "\n" +
                           hashed_canonical_request)
-        print(string_to_sign)
+        # print(string_to_sign)
 
         # ************* 步骤 3：计算签名 *************
         # 计算签名摘要函数
@@ -284,14 +284,14 @@ class tencentSpeech(object):
         secret_service = sign(secret_date, service)
         secret_signing = sign(secret_service, "tc3_request")
         signature = hmac.new(secret_signing, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
-        print(signature)
+        # print(signature)
 
         # ************* 步骤 4：拼接 Authorization *************
         authorization = (algorithm + " " +
                          "Credential=" + self.SECRET_ID + "/" + credential_scope + ", " +
                          "SignedHeaders=" + signed_headers + ", " +
                          "Signature=" + signature)
-        print(authorization)
+        # print(authorization)
         
         headers['Authorization'] = authorization
         return authorization
