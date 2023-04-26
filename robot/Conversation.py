@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import time
 import uuid
 import cProfile
@@ -36,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 class Conversation(object):
     def __init__(self, profiling=False):
-        self.brain, self.asr, self.ai, self.tts, self.nlu = None, None, None, None, None
+        self.brain, self.asr, self.ai, self.tts, self.nlu, self.player = None, None, None, None, None, None
         self.reInit()
         self.scheduler = Scheduler(self)
         # 历史会话消息
@@ -49,7 +50,6 @@ class Conversation(object):
         self.onSay = None
         self.onStream = None
         self.hasPardon = False
-        self.player = Player.SoxPlayer()
         self.lifeCycleHandler = LifeCycleHandler(self)
         self.tts_count = 0
         self.tts_index = 0
@@ -122,6 +122,9 @@ class Conversation(object):
             self.brain.printPlugins()
         except Exception as e:
             logger.critical(f"对话初始化失败：{e}", stack_info=True)
+            logger.critical("系统退出。。。。。。")
+            sys.exit(1)
+            
 
     def checkRestore(self):
         if self.immersiveMode:
@@ -442,5 +445,5 @@ class Conversation(object):
         """播放一个音频"""
         if self.player:
             self.interrupt()
-        self.player = Player.SoxPlayer()
+        # self.player = Player.SoxPlayer()
         self.player.play(src, delete=delete, onCompleted=onCompleted)
